@@ -2,6 +2,7 @@
 
 public class Cargo : MonoBehaviour
 {
+    public GKey TooMuchCargoKey;
     public float MaxAmount;
     public float Amount;
 
@@ -14,14 +15,15 @@ public class Cargo : MonoBehaviour
 
     public void Add(float amount)
     {
+        Debug.Log("Added cargo : " + amount);
         Amount += amount;
         if (Amount >= MaxAmount)
-            mAgent.beliefs.SetState("TooMuchCargo", 1);
+            mAgent.Beliefs.SetState(TooMuchCargoKey, 1);
     }
 
     public void Clear()
     {
         Amount = 0;
-        mAgent.beliefs.RemoveState("TooMuchCargo");
+        mAgent.Beliefs.RemoveState(TooMuchCargoKey);
     }
 }

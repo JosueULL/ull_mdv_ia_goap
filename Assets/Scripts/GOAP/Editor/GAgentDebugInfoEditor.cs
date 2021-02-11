@@ -1,54 +1,46 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(GAgentVisual))]
+[CustomEditor(typeof(GAgentDebugInfo))]
 [CanEditMultipleObjects]
-public class GAgentVisualEditor : Editor
+public class GAgentDebugInfoEditor : Editor
 {
-
-
-    void OnEnable()
-    {
-
-    }
-
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
         serializedObject.Update();
-        GAgentVisual agent = (GAgentVisual)target;
+        GAgentDebugInfo agent = (GAgentDebugInfo)target;
         GUILayout.Label("Name: " + agent.name);
-        GUILayout.Label("Current Action: " + agent.gameObject.GetComponent<GAgent>().currentAction);
+        GUILayout.Label("Current Action: " + agent.gameObject.GetComponent<GAgent>().CurrentAction);
         GUILayout.Label("Actions: ");
-        foreach (GAction a in agent.gameObject.GetComponent<GAgent>().actions)
+        foreach (GAction a in agent.gameObject.GetComponent<GAgent>().CurrentActions)
         {
             string pre = "";
             string eff = "";
 
-            foreach (KeyValuePair<string, int> p in a.preconditions)
+            foreach (KeyValuePair<GKey, int> p in a.Preconditions)
                 pre += p.Key + ", ";
-            foreach (KeyValuePair<string, int> e in a.effects)
+            foreach (KeyValuePair<GKey, int> e in a.Effects)
                 eff += e.Key + ", ";
 
             GUILayout.Label("====  " + a.GetType().Name + "(" + pre + ")(" + eff + ")");
         }
         GUILayout.Label("Goals: ");
-        foreach (KeyValuePair<SubGoal, int> g in agent.gameObject.GetComponent<GAgent>().goals)
+        foreach (KeyValuePair<GAgentSubGoal, int> g in agent.gameObject.GetComponent<GAgent>().CurrentGoals)
         {
             GUILayout.Label("---: ");
-            foreach (KeyValuePair<string, int> sg in g.Key.sgoals)
+            foreach (KeyValuePair<GKey, int> sg in g.Key.SubGoals)
                 GUILayout.Label("=====  " + sg.Key);
         }
         GUILayout.Label("Beliefs: ");
-        foreach (KeyValuePair<string, int> sg in agent.gameObject.GetComponent<GAgent>().beliefs.GetStates())
+        foreach (KeyValuePair<GKey, int> sg in agent.gameObject.GetComponent<GAgent>().Beliefs.GetStates())
         {
             GUILayout.Label("=====  " + sg.Key);
         }
 
         GUILayout.Label("Inventory: ");
-        foreach (KeyValuePair<string, GameObject> g in agent.gameObject.GetComponent<GAgent>().inventory.items)
+        foreach (KeyValuePair<GInventoryKey, GameObject> g in agent.gameObject.GetComponent<GAgent>().Inventory.items)
         {
             GUILayout.Label("====  " + g.Key + " : " + (g.Value ? g.Value.name : "DESTROYED"));
         }

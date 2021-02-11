@@ -1,24 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GInventory
 {
-    public Dictionary<string, GameObject> items = new Dictionary<string, GameObject>();
+    public Dictionary<GInventoryKey, GameObject> items = new Dictionary<GInventoryKey, GameObject>();
 
-    public void AddItem(string key, GameObject i)
+    public void AddItem(GInventoryKey key, GameObject i)
     {
         items[key] = i;
     }
 
-    public GameObject GetItem(string key)
+    public GameObject GetItem(GInventoryKey key)
     {
         if (items.ContainsKey(key))
             return items[key];
         else
             return null;
     }
-    public void RemoveItem(string key)
+    public void RemoveItem(GInventoryKey key)
     {
         items.Remove(key);
     }

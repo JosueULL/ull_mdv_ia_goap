@@ -1,17 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public sealed class GWorld
+﻿public sealed class GWorld
 {
-    private static readonly GWorld instance = new GWorld();
-    private static WorldStates world;
+    private static readonly GWorld mInstance = new GWorld();
+    private static WorldStates mWorld;
 
     static GWorld()
     {
-        world = new WorldStates();
-       
-
+        mWorld = new WorldStates();
     }
 
     private GWorld()
@@ -20,11 +14,11 @@ public sealed class GWorld
 
     public static GWorld Instance
     {
-        get { return instance; }
+        get { return mInstance; }
     }
 
     public WorldStates GetWorld()
     {
-        return world;
+        return mWorld;
     }
 }

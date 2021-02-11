@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     public int MaxAmount;
-    public Text Text;
+    
     public UnityEvent OnHealthChanged;
     public UnityEvent OnHealthReduced;
     public UnityEvent OnHealthDepleted;

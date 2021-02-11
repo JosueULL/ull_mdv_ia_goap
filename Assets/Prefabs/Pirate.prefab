@@ -402,7 +402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a8e7876c52b70d4fa4cdd5fc70f9d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisAgent: {fileID: 5575843002038053837}
 --- !u!114 &5575843002038053837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,8 +414,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370698e8df663df4293c4e01443a96b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
-  currentAction: {fileID: 0}
+  Goals:
+  - States:
+    - Key: {fileID: 11400000, guid: 26d0fb8cc6282454792c2f6a129ee91d, type: 2}
+      Value: 1
+    Priority: 1
+    Remove: 0
+  - States:
+    - Key: {fileID: 11400000, guid: 3255684fc95800a4cb09c19efe054be1, type: 2}
+      Value: 1
+    Priority: 2
+    Remove: 0
+  - States:
+    - Key: {fileID: 11400000, guid: 9dbfb56b3b3989f4f979cd2a0fe72f2b, type: 2}
+      Value: 1
+    Priority: 3
+    Remove: 0
+  - States:
+    - Key: {fileID: 11400000, guid: 05042888230cff14a9f8fb5f1be6f234, type: 2}
+      Value: 1
+    Priority: 4
+    Remove: 0
+  FoundVictimKey: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+  CanSeeCargoKey: {fileID: 11400000, guid: 72a54efd3aea7e74fa18a2d26aedf831, type: 2}
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
+  CargoKey: {fileID: 11400000, guid: c8d4906dae796db48b987b28641cd28a, type: 2}
   CargoPrefab: {fileID: 8254178902734368875, guid: 8be9b280474ce9644a20526dd8f3da00, type: 3}
 --- !u!114 &5575843002038053836
 MonoBehaviour:
@@ -430,16 +452,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd3f8b2ed30a53459d1a860e9b64822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions: []
-  afterEffects:
-  - key: FindVictim
-    value: 1
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: 
-  stopDistance: 1
+  Cost: 1
+  PreConditions: []
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 26d0fb8cc6282454792c2f6a129ee91d, type: 2}
+    Value: 1
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: 
+  StopDistance: 1
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
+  CargoKey: {fileID: 11400000, guid: c8d4906dae796db48b987b28641cd28a, type: 2}
 --- !u!114 &5575843002038053840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,18 +475,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621acfc2e9093314ea4cde347721931a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions:
-  - key: FoundVictim
-    value: 1
-  afterEffects:
-  - key: NearVictim
-    value: 0
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: 
-  stopDistance: 1
+  Cost: 1
+  PreConditions:
+  - Key: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+    Value: 1
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 5e73d1988ece89643a8448679179a853, type: 2}
+    Value: 1
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: 
+  StopDistance: 1.5
+  FoundVictimKey: {fileID: 11400000, guid: 26d0fb8cc6282454792c2f6a129ee91d, type: 2}
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
 --- !u!114 &5575843002038053842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,15 +500,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4078c9b68bf5fbd44b0320cef45065ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions:
-  - key: NearVictim
-    value: 1
-  afterEffects:
-  - key: KillVictim
-    value: 1
-  agent: {fileID: 0}
-  running: 0
+  Cost: 1
+  PreConditions:
+  - Key: {fileID: 11400000, guid: 5e73d1988ece89643a8448679179a853, type: 2}
+    Value: 0
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 3255684fc95800a4cb09c19efe054be1, type: 2}
+    Value: 1
+  Running: 0
+  FoundVictimKey: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
+  Damage: 3
   TimeBetweenAttacks: 3
 --- !u!135 &1711635211
 SphereCollider:
@@ -512,7 +538,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxAmount: 5
-  Text: {fileID: 0}
   OnHealthChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -558,6 +583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b12ed0c5ba5cfc42b44a336ae7dc902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TooMuchCargoKey: {fileID: 11400000, guid: 4e188d1e381540d498098cb9fc87c705, type: 2}
   MaxAmount: 3
   Amount: 0
 --- !u!114 &8994938792869799348
@@ -572,18 +598,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3ed6de03903d142a1342527f2cfe21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions:
-  - key: TooMuchCargo
-    value: 1
-  afterEffects:
-  - key: BankCargo
-    value: 1
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: PiratePort
-  stopDistance: 1
+  Cost: 1
+  PreConditions:
+  - Key: {fileID: 11400000, guid: 4e188d1e381540d498098cb9fc87c705, type: 2}
+    Value: 1
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 05042888230cff14a9f8fb5f1be6f234, type: 2}
+    Value: 1
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: PiratePort
+  StopDistance: 1
 --- !u!114 &6604393547651301545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,18 +621,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589c426ed5a60d94ba9b6053cac874bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions:
-  - key: CanSeeCargo
-    value: 1
-  afterEffects:
-  - key: PickupCargo
-    value: 1
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: 
-  stopDistance: 1
+  Cost: 1
+  PreConditions:
+  - Key: {fileID: 11400000, guid: 72a54efd3aea7e74fa18a2d26aedf831, type: 2}
+    Value: 1
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 9dbfb56b3b3989f4f979cd2a0fe72f2b, type: 2}
+    Value: 1
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: 
+  StopDistance: 1
+  CanSeeCargoKey: {fileID: 11400000, guid: 72a54efd3aea7e74fa18a2d26aedf831, type: 2}
+  CargoKey: {fileID: 11400000, guid: c8d4906dae796db48b987b28641cd28a, type: 2}
 --- !u!114 &945144661
 MonoBehaviour:
   m_ObjectHideFlags: 0

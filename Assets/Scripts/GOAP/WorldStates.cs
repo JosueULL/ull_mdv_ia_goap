@@ -1,61 +1,60 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class WorldState
 {
-    public string key;
-    public int value;
+    public GKey Key;
+    public int Value;
 }
 
 public class WorldStates
 {
-    public Dictionary<string, int> states;
+    public Dictionary<GKey, int> States;
 
     public WorldStates()
     {
-        states = new Dictionary<string, int>();
+        States = new Dictionary<GKey, int>();
     }
 
-    public bool HasState(string key)
+    public bool HasState(GKey key)
     {
-        return states.ContainsKey(key);
+        return States.ContainsKey(key);
     }
 
-    void AddState(string key, int value)
+    void AddState(GKey key, int value)
     {
-        states.Add(key, value);
+        States.Add(key, value);
     }
 
-    public void ModifyState(string key, int value)
+    public void ModifyState(GKey key, int value)
     {
-        if (states.ContainsKey(key))
+        if (States.ContainsKey(key))
         {
-            states[key] += value;
-            if (states[key] <= 0)
+            States[key] += value;
+            if (States[key] <= 0)
                 RemoveState(key);
         }
         else
-            states.Add(key, value);
+            States.Add(key, value);
     }
 
-    public void RemoveState(string key)
+    public void RemoveState(GKey key)
     {
-        if (states.ContainsKey(key))
-            states.Remove(key);
+        if (States.ContainsKey(key))
+            States.Remove(key);
     }
 
-    public void SetState(string key, int value)
+    public void SetState(GKey key, int value)
     {
-        if (states.ContainsKey(key))
-            states[key] = value;
+        if (States.ContainsKey(key))
+            States[key] = value;
         else
-            states.Add(key, value);
+            States.Add(key, value);
     }
 
-    public Dictionary<string, int> GetStates()
+    public Dictionary<GKey, int> GetStates()
     {
-        return states;
+        return States;
     }
 }

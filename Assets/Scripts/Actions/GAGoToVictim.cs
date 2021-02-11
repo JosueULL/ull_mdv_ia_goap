@@ -2,7 +2,11 @@
 
 public class GAGoToVictim : GActionGoToTarget
 {
-    private GameObject victim;
+    public GKey FoundVictimKey;
+    public GInventoryKey VictimKey;
+
+    private GameObject mVictim;
+
     public override bool PostPerform()
     {
         return base.PostPerform();
@@ -10,31 +14,31 @@ public class GAGoToVictim : GActionGoToTarget
 
     public override bool PrePerform()
     {
-        victim = inventory.GetItem("Victim");
-        if (victim)
+        mVictim = Inventory.GetItem(VictimKey);
+        if (mVictim)
         {
-            target = victim;
+            Target = mVictim;
             return base.PrePerform();
         }
         else
         {
-            beliefs.RemoveState("FoundVictim");
+            Beliefs.RemoveState(FoundVictimKey);
             return false;
         }
     }
 
     public override void Perform()
     {
-        GameObject victim = inventory.GetItem("Victim");
+        GameObject victim = Inventory.GetItem(VictimKey);
         if (victim)
         {
             Debug.DrawLine(transform.position, victim.transform.position);
-            target = victim;
+            Target = victim;
 
         }
         else if (!victim || !victim.activeSelf)
         {
-            running = false;
+            Running = false;
         }
 
         base.Perform();

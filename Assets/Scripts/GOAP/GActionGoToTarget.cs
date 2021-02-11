@@ -1,11 +1,19 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class GActionGoToTarget : GAction
 {
-    public GameObject target;
-    public string targetTag;
-    public float stopDistance = 1;
+    public GameObject Target;
+    public string TargetTag;
+    public float StopDistance = 1;
+
+    protected NavMeshAgent mNavMeshAgent;
+
+    public override void Awake()
+    {
+        base.Awake();
+        mNavMeshAgent = this.GetComponent<NavMeshAgent>();
+    }
 
     public override bool PostPerform()
     {
@@ -16,12 +24,12 @@ public class GActionGoToTarget : GAction
     {
         base.PrePerform();
 
-        if (target == null && targetTag != "")
-            target = GameObject.FindWithTag(targetTag);
+        if (Target == null && TargetTag != "")
+            Target = GameObject.FindWithTag(TargetTag);
 
-        if (target != null)
+        if (Target != null)
         {
-            agent.SetDestination(target.transform.position);
+            mNavMeshAgent.SetDestination(Target.transform.position);
             return true;
         }
 
@@ -30,31 +38,27 @@ public class GActionGoToTarget : GAction
 
     public override void Perform()
     {
-        if (!target)
+        if (!Target)
         {
-            running = false;
+            Running = false;
             return;
         }
 
-        // si el navmesh no está calculando bien el remaining distance, se puede
-        //calcular la distancia a mano.
-        float distanceToTarget = Vector3.Distance(target.transform.position, this.transform.position);
-        //if (currentAction.agent.hasPath && distanceToTarget < 2f) //currentAction.agent.remainingDistance < 2f)
-        if (distanceToTarget <= stopDistance)
+        float distanceToTarget = Vector3.Distance(Target.transform.position, this.transform.position);
+        if (distanceToTarget <= StopDistance)
         {
-            running = false;
+            Running = false;
         }
         else
         {
-            agent.SetDestination(target.transform.position);
+            mNavMeshAgent.SetDestination(Target.transform.position);
         }
     }
-
 
     protected void PickRandomWithTag(string tag)
     {
         GameObject[] wanderPoints = GameObject.FindGameObjectsWithTag(tag);
-        target = wanderPoints[Random.Range(0, wanderPoints.Length)];
+        Target = wanderPoints[Random.Range(0, wanderPoints.Length)];
     }
 
 }

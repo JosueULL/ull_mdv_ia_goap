@@ -1,48 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public abstract class GAction : MonoBehaviour
 {
-    public float cost = 1.0f;
+    public float Cost = 1.0f;
     
-    public WorldState[] preConditions;
-    public WorldState[] afterEffects;
-    public NavMeshAgent agent;
+    public WorldState[] PreConditions;
+    public WorldState[] AfterEffects;
+    
+    public Dictionary<GKey, int> Preconditions;
+    public Dictionary<GKey, int> Effects;
+    public bool Running = false;
 
-    public Dictionary<string, int> preconditions;
-    public Dictionary<string, int> effects;
+    protected GAgent mAgent;
 
-
-    public GInventory inventory;
-    public WorldStates beliefs;
-
-    public bool running = false;
+    public GInventory Inventory => mAgent.Inventory;
+    public WorldStates Beliefs => mAgent.Beliefs;
 
     public GAction()
     {
-        preconditions = new Dictionary<string, int>();
-        effects = new Dictionary<string, int>();
+        Preconditions = new Dictionary<GKey, int>();
+        Effects = new Dictionary<GKey, int>();
     }
 
-    public void Awake()
+    public virtual void Awake()
     {
-        agent = this.gameObject.GetComponent<NavMeshAgent>();
-
-        if (preConditions != null)
-            foreach (WorldState w in preConditions)
+        if (PreConditions != null)
+            foreach (WorldState w in PreConditions)
             {
-                preconditions.Add(w.key, w.value);
+                Preconditions.Add(w.Key, w.Value);
             }
 
-        if (afterEffects != null)
-            foreach (WorldState w in afterEffects)
+        if (AfterEffects != null)
+            foreach (WorldState w in AfterEffects)
             {
-                effects.Add(w.key, w.value);
+                Effects.Add(w.Key, w.Value);
             }
-        inventory = this.GetComponent<GAgent>().inventory;
-        beliefs = this.GetComponent<GAgent>().beliefs;
+
+        mAgent = GetComponent<GAgent>();
     }
 
     public bool IsAchievable()
@@ -50,9 +46,9 @@ public abstract class GAction : MonoBehaviour
         return true;
     }
 
-    public bool IsAchievableGiven(Dictionary<string, int> conditions)
+    public bool IsAchievableGiven(Dictionary<GKey, int> conditions)
     {
-        foreach (KeyValuePair<string, int> p in preconditions)
+        foreach (KeyValuePair<GKey, int> p in Preconditions)
         {
             if (!conditions.ContainsKey(p.Key))
                 return false;
@@ -62,7 +58,7 @@ public abstract class GAction : MonoBehaviour
 
     public virtual bool PrePerform() 
     { 
-        running = true;
+        Running = true;
         return true;
     }
 

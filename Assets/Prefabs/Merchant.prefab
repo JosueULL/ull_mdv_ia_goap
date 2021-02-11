@@ -128,8 +128,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779ca027709874b4098b478e8edb734f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
-  currentAction: {fileID: 0}
+  Goals:
+  - States:
+    - Key: {fileID: 11400000, guid: 9dbfb56b3b3989f4f979cd2a0fe72f2b, type: 2}
+      Value: 1
+    Priority: 1
+    Remove: 0
 --- !u!114 &364712435825379047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,16 +146,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e7e8d07d40208e48afd5407e429e9fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions: []
-  afterEffects:
-  - key: PickupCargo
-    value: 1
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: 
-  stopDistance: 1
+  Cost: 1
+  PreConditions: []
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 9dbfb56b3b3989f4f979cd2a0fe72f2b, type: 2}
+    Value: 0
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: 
+  StopDistance: 1
 --- !u!195 &364712435825379045
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -291,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 1892078723244562, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
-  Parent: {fileID: 364712435825379049}
+  Parent: {fileID: 0}
   DetachFromParent: 1
 --- !u!1001 &364712435761668562
 PrefabInstance:

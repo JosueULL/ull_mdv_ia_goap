@@ -1,39 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GAPickupCargo : GActionGoToTarget
 {
+    public GKey CanSeeCargoKey;
+    public GInventoryKey CargoKey;
+
+    private Cargo mCargo;
+
+    public override void Awake()
+    {
+        base.Awake();
+        mCargo = GetComponent<Cargo>();
+    }
+
     public override bool PostPerform()
     {
-        inventory.RemoveItem("TargetCargo");
-        beliefs.RemoveState("CanSeeCargo");
+        Inventory.RemoveItem(CargoKey);
+        Beliefs.RemoveState(CanSeeCargoKey);
         return base.PostPerform();
     }
 
     public override bool PrePerform()
     {
-        GameObject cargo = inventory.GetItem("TargetCargo");
-        target = cargo;
+        GameObject cargo = Inventory.GetItem(CargoKey);
+        Target = cargo;
         return base.PrePerform();
     }
 
     public override void Perform()
     {
-        GameObject cargo = inventory.GetItem("TargetCargo");
+        GameObject cargo = Inventory.GetItem(CargoKey);
         if (!cargo)
         {
-            target = null;
-            running = false;
+            Target = null;
+            Running = false;
         }
 
         base.Perform();
 
-        if (!running && cargo) // Reached the cargo
+        if (!Running && cargo) // Reached the cargo
         {
-            Cargo agentCargo = agent.GetComponent<Cargo>();
             Loot loot = cargo.GetComponent<Loot>();
-            agentCargo.Add(loot.Value);
+            mCargo.Add(loot.Value);
             Destroy(cargo);
         }
     }

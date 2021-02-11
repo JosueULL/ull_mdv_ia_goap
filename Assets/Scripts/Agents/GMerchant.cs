@@ -2,10 +2,11 @@
 
 public class GMerchant : GAgent
 {
+    public int MinLoot = 1;
+    public int MaxLoot = 5;
+
     void Awake()
     {
-        goals.Add(new SubGoal("PickupCargo", 1, false), 1);
-
-        GetComponent<Loot>().Value = Random.Range(1, 5);
+        GetComponent<Loot>().Value = Random.Range(MinLoot, MaxLoot);
     }
 }

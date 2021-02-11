@@ -2,11 +2,24 @@
 
 public class GAAttackVictim : GAction
 {
+    public GKey FoundVictimKey;
+    public GInventoryKey VictimKey;
+    public int Damage = 1;
     public float TimeBetweenAttacks = 3;
+    
     private float mLastAttack;
+
+    private Cargo mCargo;
+
+    public override void Awake()
+    {
+        base.Awake();
+        mCargo = GetComponent<Cargo>();
+    }
 
     public override void Perform()
     {
+        // Nothing...
     }
 
     public override bool PostPerform()
@@ -16,7 +29,7 @@ public class GAAttackVictim : GAction
 
     public override bool PrePerform()
     {
-        GameObject victim = inventory.GetItem("Victim");
+        GameObject victim = Inventory.GetItem(VictimKey);
         if (victim)
         {
             if (victim.activeSelf)
@@ -24,15 +37,13 @@ public class GAAttackVictim : GAction
                 if ((Time.time - mLastAttack) > TimeBetweenAttacks)
                 {
                     Health health = victim.GetComponent<Health>();
-                    health.ReduceHealth(1);
+                    health.ReduceHealth(Damage);
                     if (health.CurrentAmount <= 0)
                     {
                         Loot loot = victim.GetComponent<Loot>();
-                        Cargo cargo = agent.GetComponent<Cargo>();
-                        if (loot && cargo)
+                        if (loot && mCargo)
                         {
-                            cargo.Add(loot.Value);
-                            
+                            mCargo.Add(loot.Value);
                         }
 
                         victim.gameObject.SetActive(false);
@@ -43,7 +54,8 @@ public class GAAttackVictim : GAction
 
             if (!victim.activeSelf)
             {
-                inventory.RemoveItem("Victim");
+                Inventory.RemoveItem(VictimKey);
+                Beliefs.RemoveState(FoundVictimKey);
             }
         }
 

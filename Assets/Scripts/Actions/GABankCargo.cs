@@ -1,14 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GABankCargo : GActionGoToTarget
+﻿public class GABankCargo : GActionGoToTarget
 {
+    private Cargo mCargo;
+
+    public override void Awake()
+    {
+        base.Awake();
+        mCargo = GetComponent<Cargo>();
+    }
 
     public override bool PostPerform()
     {
-        
-        agent.GetComponent<Cargo>().Clear();
+        mCargo.Clear();
         return base.PostPerform();
     }
 }

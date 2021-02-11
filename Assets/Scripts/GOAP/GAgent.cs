@@ -1,50 +1,69 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class SubGoal
+public class GAgentSubGoal
 {
-    public Dictionary<string, int> sgoals;
-    public bool remove;
-
-    public SubGoal(string s, int i, bool r)
-    {
-        sgoals = new Dictionary<string, int>();
-        sgoals.Add(s, i);
-        remove = r;
-    }
+    public Dictionary<GKey, int> SubGoals;
+    public bool Remove;
 }
 
 public class GAgent : MonoBehaviour
 {
-    public List<GAction> actions = new List<GAction>();
-    public Dictionary<SubGoal, int> goals = new Dictionary<SubGoal, int>();
-    public WorldStates beliefs = new WorldStates();
-    public GInventory inventory = new GInventory();
+    [System.Serializable]
+    public class GoalEntry
+    {
+        public WorldState[] States;
+        public int Priority;
+        public bool Remove;
+    }
 
-    GPlanner planner;
-    Queue<GAction> actionQueue;
-    public GAction currentAction;
-    SubGoal currentGoal;
+    public GoalEntry[] Goals;
+    public WorldStates Beliefs = new WorldStates();
+    public GInventory Inventory = new GInventory();
 
-    // Start is called before the first frame update
+    private Dictionary<GAgentSubGoal, int> mGoals = new Dictionary<GAgentSubGoal, int>();
+    private GPlanner mPlanner;
+    private Queue<GAction> mActionQueue;
+    private GAction mCurrentAction;
+    private GAgentSubGoal mCurrentGoal;
+    private List<GAction> mActions = new List<GAction>();
+
+#if UNITY_EDITOR
+    // Used by GAgentDebugInfo --------
+    public GAction CurrentAction => mCurrentAction;
+    public List<GAction> CurrentActions => mActions;
+    public Dictionary<GAgentSubGoal, int> CurrentGoals => mGoals;
+#endif
+
     public void Start()
     {
+        foreach(GoalEntry ge in Goals)
+        {
+            GAgentSubGoal subGoal = new GAgentSubGoal();
+            subGoal.SubGoals = new Dictionary<GKey, int>();
+            foreach (WorldState gs in ge.States)
+            {
+                subGoal.SubGoals.Add(gs.Key, gs.Value);
+            }
+            subGoal.Remove = ge.Remove;
+            mGoals.Add(subGoal, ge.Priority);
+        }
+
         GAction[] acts = this.GetComponents<GAction>();
         foreach (GAction a in acts)
-            actions.Add(a);
+            mActions.Add(a);
     }
 
     void LateUpdate()
     {
-        if (currentAction != null && currentAction.running)
+        if (mCurrentAction != null && mCurrentAction.Running)
         {
-            currentAction.Perform();
-            if (!currentAction.running)
+            mCurrentAction.Perform();
+            if (!mCurrentAction.Running)
             {
-                currentAction.PostPerform();
-                currentAction = null;
+                mCurrentAction.PostPerform();
+                mCurrentAction = null;
             }
            else
             {
@@ -52,41 +71,41 @@ public class GAgent : MonoBehaviour
             }
         }
 
-        if (planner == null || actionQueue == null)
+        if (mPlanner == null || mActionQueue == null)
         {
-            planner = new GPlanner();
+            mPlanner = new GPlanner();
 
-            var sortedGoals = from entry in goals orderby entry.Value descending select entry;
+            var sortedGoals = from entry in mGoals orderby entry.Value descending select entry;
 
-            foreach (KeyValuePair<SubGoal, int> sg in sortedGoals)
+            foreach (KeyValuePair<GAgentSubGoal, int> sg in sortedGoals)
             {
-                actionQueue = planner.plan(actions, sg.Key.sgoals, beliefs);
-                if (actionQueue != null)
+                mActionQueue = mPlanner.Plan(mActions, sg.Key.SubGoals, Beliefs);
+                if (mActionQueue != null)
                 {
-                    currentGoal = sg.Key;
+                    mCurrentGoal = sg.Key;
                     break;
                 }
             }
         }
 
-        if (actionQueue != null && actionQueue.Count == 0)
+        if (mActionQueue != null && mActionQueue.Count == 0)
         {
-            if (currentGoal.remove)
+            if (mCurrentGoal.Remove)
             {
-                goals.Remove(currentGoal);
+                mGoals.Remove(mCurrentGoal);
             }
-            planner = null;
+            mPlanner = null;
         }
 
-        if (actionQueue != null && actionQueue.Count > 0)
+        if (mActionQueue != null && mActionQueue.Count > 0)
         {
-            GAction newAction = actionQueue.Dequeue();
+            GAction newAction = mActionQueue.Dequeue();
             //if (newAction != currentAction)
            // {
-                currentAction = newAction;
+                mCurrentAction = newAction;
 
-                if (!currentAction.PrePerform())
-                    actionQueue = null;
+                if (!mCurrentAction.PrePerform())
+                    mActionQueue = null;
            // }
 
         }

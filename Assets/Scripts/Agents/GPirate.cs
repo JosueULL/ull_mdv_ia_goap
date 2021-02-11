@@ -2,53 +2,58 @@
 
 public class GPirate : GAgent
 {
+    public GKey FoundVictimKey;
+    public GKey CanSeeCargoKey;
+
+    public GInventoryKey VictimKey;
+    public GInventoryKey CargoKey;
+
     public GameObject CargoPrefab;
+
+    private Cargo mCargo;
 
     private void Awake()
     {
-        goals.Add(new SubGoal("FindVictim", 1, false), 1);
-        goals.Add(new SubGoal("KillVictim", 1, false), 2);
-        goals.Add(new SubGoal("PickupCargo", 1, false), 3);
-        goals.Add(new SubGoal("BankCargo", 1, false), 4);
-
+        mCargo = GetComponent<Cargo>();
+        
         GetComponent<Health>().OnHealthDepleted.AddListener(OnDeath);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Victim"))
+        if (other.CompareTag(Tags.Victim))
         {
-            GameObject victim = inventory.GetItem("Victim");
+            GameObject victim = Inventory.GetItem(VictimKey);
             if (!victim || Vector3.Distance(transform.position, victim.transform.position) > Vector3.Distance(transform.position, other.transform.position))
             {
-                inventory.AddItem("Victim", other.gameObject);
-                beliefs.SetState("FoundVictim", 1);
+                Inventory.AddItem(VictimKey, other.gameObject);
+                Beliefs.SetState(FoundVictimKey, 1);
             }
         }
 
-        if (other.CompareTag("Cargo"))
+        if (other.CompareTag(Tags.Cargo))
         {
-            inventory.AddItem("TargetCargo", other.gameObject);
-            beliefs.SetState("CanSeeCargo", 1);
+            Inventory.AddItem(CargoKey, other.gameObject);
+            Beliefs.SetState(CanSeeCargoKey, 1);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Victim"))
+        if (other.CompareTag(Tags.Victim))
         {
-            GameObject victim = inventory.GetItem("Victim");
+            GameObject victim = Inventory.GetItem(VictimKey);
             if (victim == other.gameObject)
             {
-                inventory.RemoveItem("Victim");
-                beliefs.RemoveState("FoundVictim");
+                Inventory.RemoveItem(VictimKey);
+                Beliefs.RemoveState(FoundVictimKey);
             }
         }
     }
 
     private void OnDeath()
     {
-        float cargoAmount = GetComponent<Cargo>().Amount;
+        float cargoAmount = mCargo.Amount;
         if (cargoAmount > 0) 
         {
             GameObject cargo = Instantiate(CargoPrefab, transform.position, transform.rotation);

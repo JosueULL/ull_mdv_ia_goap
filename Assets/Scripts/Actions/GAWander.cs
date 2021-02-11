@@ -1,5 +1,8 @@
 ﻿public class GAWander : GActionGoToTarget
 {
+    public GInventoryKey VictimKey;
+    public GInventoryKey CargoKey;
+
     public override bool PrePerform()
     {
         PickRandomWithTag("WanderPoint");
@@ -10,9 +13,9 @@
     {
         base.Perform();
 
-        if (inventory.GetItem("Victim") || inventory.GetItem("TargetCargo"))
+        if (Inventory.GetItem(VictimKey) || Inventory.GetItem(CargoKey))
         {
-            running = false;
+            Running = false;
         }
     }
 

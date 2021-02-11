@@ -171,7 +171,7 @@ Transform:
   m_GameObject: {fileID: 1825704446641684386}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 19.2, y: 0, z: 0.82}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_Children:
   - {fileID: 2223808412647898993}
   - {fileID: 858128253}
@@ -190,8 +190,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e973295f03ce0f4439462234f5ad5a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
-  currentAction: {fileID: 0}
+  Goals:
+  - States:
+    - Key: {fileID: 11400000, guid: 26d0fb8cc6282454792c2f6a129ee91d, type: 2}
+      Value: 1
+    Priority: 1
+    Remove: 0
+  - States:
+    - Key: {fileID: 11400000, guid: 3255684fc95800a4cb09c19efe054be1, type: 2}
+      Value: 1
+    Priority: 2
+    Remove: 0
+  FoundVictimKey: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
 --- !u!195 &1825704446641684397
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -242,16 +253,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd3f8b2ed30a53459d1a860e9b64822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions: []
-  afterEffects:
-  - key: FindUnprotected
-    value: 1
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: 
-  stopDistance: 2
+  Cost: 1
+  PreConditions: []
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 26d0fb8cc6282454792c2f6a129ee91d, type: 2}
+    Value: 1
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: 
+  StopDistance: 1
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
+  CargoKey: {fileID: 11400000, guid: c8d4906dae796db48b987b28641cd28a, type: 2}
 --- !u!114 &1408588735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,18 +289,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621acfc2e9093314ea4cde347721931a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions:
-  - key: FoundVictim
-    value: 1
-  afterEffects:
-  - key: NearVictim
-    value: 1
-  agent: {fileID: 0}
-  running: 0
-  target: {fileID: 0}
-  targetTag: 
-  stopDistance: 2
+  Cost: 1
+  PreConditions:
+  - Key: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+    Value: 1
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 5e73d1988ece89643a8448679179a853, type: 2}
+    Value: 1
+  Running: 0
+  Target: {fileID: 0}
+  TargetTag: 
+  StopDistance: 2
+  FoundVictimKey: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
 --- !u!114 &1408588736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,13 +314,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4078c9b68bf5fbd44b0320cef45065ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 1
-  preConditions:
-  - key: NearVictim
-    value: 1
-  afterEffects:
-  - key: KillVictim
-    value: 1
-  agent: {fileID: 0}
-  running: 0
+  Cost: 1
+  PreConditions:
+  - Key: {fileID: 11400000, guid: 5e73d1988ece89643a8448679179a853, type: 2}
+    Value: 1
+  AfterEffects:
+  - Key: {fileID: 11400000, guid: 3255684fc95800a4cb09c19efe054be1, type: 2}
+    Value: 1
+  Running: 0
+  FoundVictimKey: {fileID: 11400000, guid: ec48252fbee133f44bf8ed807b9203fe, type: 2}
+  VictimKey: {fileID: 11400000, guid: b597ab1d9bf03ac41b259fb8792dc5fd, type: 2}
+  Damage: 1
   TimeBetweenAttacks: 3

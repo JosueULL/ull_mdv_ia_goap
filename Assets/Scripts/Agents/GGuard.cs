@@ -2,25 +2,22 @@
 
 public class GGuard : GAgent
 {
-    void Awake()
-    {
-        goals.Add(new SubGoal("FindUnprotected", 1, false), 1);
-        goals.Add(new SubGoal("KillVictim", 1, false), 2);
-    }
+    public GKey FoundVictimKey;
+    public GInventoryKey VictimKey;
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Pirate"))
+        if (other.CompareTag(Tags.Pirate))
         {
-            GameObject victim = inventory.GetItem("Victim");
+            GameObject victim = Inventory.GetItem(VictimKey);
             if (!victim || Vector3.Distance(transform.position, victim.transform.position) > Vector3.Distance(transform.position, other.transform.position))
             {
                 // Check if the pirate is attacking someone
                 GAgent otherAgent = other.GetComponent<GAgent>();
-                if (otherAgent.inventory.GetItem("Victim") != null)
+                if (otherAgent.Inventory.GetItem(VictimKey) != null)
                 {
-                    inventory.AddItem("Victim", other.gameObject);
-                    beliefs.SetState("FoundVictim",1);
+                    Inventory.AddItem(VictimKey, other.gameObject);
+                    Beliefs.SetState(FoundVictimKey, 1);
                 }
             }
         }
@@ -29,13 +26,13 @@ public class GGuard : GAgent
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Pirate"))
+        if (other.CompareTag(Tags.Pirate))
         {
-            GameObject victim = inventory.GetItem("Victim");
+            GameObject victim = Inventory.GetItem(VictimKey);
             if (victim == other.gameObject)
             {
-                inventory.RemoveItem("Victim");
-                beliefs.RemoveState("FoundVictim");
+                Inventory.RemoveItem(VictimKey);
+                Beliefs.RemoveState(FoundVictimKey);
             }
         }
     }
